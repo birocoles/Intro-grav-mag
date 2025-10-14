@@ -920,20 +920,6 @@ def sphere_gravity_potential_reference(half_length=20, slider_step=0.5, figure_s
     # Set the initial density
     rho_init = 2
 
-    # Function for computing the gravitational potential
-    def gravitational_potential(R0, rho, R):
-        potential = np.zeros_like(R).ravel()
-        mask = (R.ravel() > R0)
-        potential[mask] = rho*(4/3)*np.pi*(R0**3)*(1/R.ravel()[mask])
-        mask = (R.ravel() == R0)
-        potential[mask] = rho*(4/3)*np.pi*(R0**2)
-        mask = (R.ravel() < R0)
-        potential[mask] = rho*2*np.pi*(R0**2 - (R.ravel()[mask]**2)/3)
-        mask = (R.ravel() == 0)
-        potential[mask] = rho*2*np.pi*(R0**2)
-        return potential.reshape(R.shape)
-
-
     # create Output widget to hold the figure
     out_fig = widgets.Output()
 
@@ -1048,21 +1034,6 @@ def sphere_gravity_potential_disturbed(half_length=20, slider_step=0.5, figure_s
     Za_minus = -0.85 * R0_init * np.sqrt(2)/2
     Ra_minus = np.sqrt((X-Xa_minus)**2 + (Z-Za_minus)**2)
 
-
-    # Function for computing the gravitational potential
-    def gravitational_potential(R0, rho, R):
-        potential = np.zeros_like(R).ravel()
-        mask = (R.ravel() > R0)
-        potential[mask] = rho*(4/3)*np.pi*(R0**3)*(1/R.ravel()[mask])
-        mask = (R.ravel() == R0)
-        potential[mask] = rho*(4/3)*np.pi*(R0**2)
-        mask = (R.ravel() < R0)
-        potential[mask] = rho*2*np.pi*(R0**2 - (R.ravel()[mask]**2)/3)
-        mask = (R.ravel() == 0)
-        potential[mask] = rho*2*np.pi*(R0**2)
-        return potential.reshape(R.shape)
-
-
     # create Output widget to hold the figure
     out_fig = widgets.Output()
 
@@ -1170,3 +1141,17 @@ def sphere_gravity_potential_disturbed(half_length=20, slider_step=0.5, figure_s
     ui = HBox([out_fig, sliders])
     
     display(ui)
+
+
+# Function for computing the gravitational potential
+def gravitational_potential(R0, rho, R):
+    potential = np.zeros_like(R).ravel()
+    mask = (R.ravel() > R0)
+    potential[mask] = rho*(4/3)*np.pi*(R0**3)*(1/R.ravel()[mask])
+    mask = (R.ravel() == R0)
+    potential[mask] = rho*(4/3)*np.pi*(R0**2)
+    mask = (R.ravel() < R0)
+    potential[mask] = rho*2*np.pi*(R0**2 - (R.ravel()[mask]**2)/3)
+    mask = (R.ravel() == 0)
+    potential[mask] = rho*2*np.pi*(R0**2)
+    return potential.reshape(R.shape)
